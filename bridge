@@ -1,0 +1,25 @@
+# Creación del puente de red llamado br0
+sudo nmcli connection add type bridge con-name br0 ifname br0
+
+# Configuración de br0 con dirección IP estática y parámetros de red
+sudo nmcli connection modify br0 \
+  ipv4.method manual \
+  ipv4.addresses 192.168.1.50/24 \
+  ipv4.gateway 192.168.1.1 \
+  ipv4.dns "8.8.8.8 8.8.4.4" \
+  bridge.stp no \
+  bridge.forward-delay 0 \
+  ipv6.method ignore
+
+# Asociación de la interfaz física ens33 como esclava del puente br0
+sudo nmcli connection add type bridge-slave \
+  ifname ens33 \
+  master br0 \
+  con-name ens33-slave
+
+# Desactivación de la conexión original de ens33 (evita conflictos)
+sudo nmcli connection down ens33 || true
+
+# Activación de la interfaz esclava y del puente br0
+sudo nmcli connection up ens33-slave
+sudo nmcli connection up br0

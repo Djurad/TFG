@@ -1,0 +1,56 @@
+//1.Instalación de los paquetes necesarios
+# Actualiza la lista de paquetes disponibles
+sudo apt update
+# Instala el entorno gráfico XFCE y herramientas adicionales
+sudo apt install xfce4 xfce4-goodies
+# Instala el servidor VNC (TigerVNC)
+sudo apt install tigervnc-standalone-server
+# Instala dbus-x11, necesario para que XFCE funcione correctamente por VNC
+sudo apt install dbus-x11
+
+//2.Preparación de la sesión VNC
+# Lanza una primera sesión VNC para generar los archivos de configuración
+vncserver
+# Detiene la sesión recién creada para editar su configuración
+vncserver -kill :1
+
+//3.Configuración del archivo de inicio de sesión gráfica
+# Edita el script que se ejecuta al iniciar una sesión VNC
+nano ~/.vnc/xstartup
+//Contenido
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+exec startxfce4
+# Da permisos de ejecución al script
+chmod +x ~/.vnc/xstartup
+//4.Creación de servicio systemd para inicio VNC automáticamente 
+# Crea el archivo del servicio 
+sudo nano /etc/systemd/system/vncserver@.service
+//Contenido
+[Unit]
+Description=Start TigerVNC server 
+After=syslog.target network.target
+
+[Service]
+Type=forking
+User=alumno
+Group=alumno
+WorkingDirectory=/home/alumno
+
+PIDFile=/home/alumno/.vnc/%H:%i.pid
+ExecStartPre=-/usr/bin/vncserver -kill :%i > /dev/null 2>&1
+ExecStart=/usr/bin/vncserver -depth 24 -geometry 1366x768 :%i -localhost no
+ExecStop=/usr/bin/vncserver -kill :%i
+
+[Install]
+WantedBy=multi-user.target
+
+//5.Activación del servicio al arrancar el sistema
+
+# Recarga los servicios para detectar el nuevo
+sudo systemctl daemon-reload
+# Habilita el servicio para que se inicie al arrancar
+sudo systemctl enable vncserver@1.service
+# Inicia manualmente el servicio por primera vez
+sudo systemctl start vncserver@1.service

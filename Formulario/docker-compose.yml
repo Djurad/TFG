@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    container_name: mysql-ciberseguridad
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ciberseguridad
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+
+  app:
+    build: .
+    container_name: formulario-app
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: ciberseguridad
+
+volumes:
+  db_data:

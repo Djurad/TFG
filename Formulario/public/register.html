@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro - Ciberseguridad</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-image: url('./img1.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 0;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2em;
+      border-radius: 8px;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1 {
+      font-size: 1.8em;
+      color: #005489;
+      margin-bottom: 1em;
+    }
+
+    .logo {
+      width: 120px;
+      margin-bottom: 1em;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.8em;
+      margin: 10px 0;
+      border-radius: 4px;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+      font-size: 1em;
+      transition: border-color 0.3s;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.8em;
+      background-color: #005489;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background-color: #aaa;
+      cursor: not-allowed;
+    }
+
+    button:hover:enabled {
+      background-color: #003b63;
+    }
+
+    #message {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    a {
+      color: #005489;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <img src="https://www.upm.es/gsfs/SFS24596" alt="Logo UPM" class="logo" />
+    <h1>Registro Ciberseguridad</h1>
+    <form id="registerForm">
+      <input type="email" id="email" placeholder="Correo electrónico (con @alumnos.upm.es)" required />
+      <input type="password" id="password" placeholder="Contraseña" required />
+      <button type="submit" id="registerButton" disabled>Registrarse</button>
+    </form>
+    <p id="message"></p>
+    <p><a href="index.html">Volver al inicio de sesión</a></p>
+  </div>
+
+  <script>
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const registerButton = document.getElementById('registerButton');
+    const message = document.getElementById('message');
+
+    function validateForm() {
+      const email = emailInput.value.trim().toLowerCase();
+      const password = passwordInput.value.trim();
+      const isEmailValid = email.endsWith('@alumnos.upm.es');
+      const isPasswordValid = password !== '';
+      registerButton.disabled = !(isEmailValid && isPasswordValid);
+    }
+
+    emailInput.addEventListener('input', validateForm);
+    passwordInput.addEventListener('input', validateForm);
+
+    document.getElementById('registerForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const email = emailInput.value.trim().toLowerCase();
+      const password = passwordInput.value.trim();
+
+      message.style.color = '';
+      message.textContent = '';
+      emailInput.style.borderColor = '';
+      passwordInput.style.borderColor = '';
+      registerButton.disabled = true;
+      registerButton.textContent = 'Registrando...';
+
+      fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+      .then(response => {
+        if (response.status === 409) {
+          message.style.color = 'red';
+          message.textContent = 'Este correo ya está registrado. Prueba con otro o inicia sesión.';
+          emailInput.style.borderColor = 'red';
+          passwordInput.value = '';
+          emailInput.disabled = false;
+          passwordInput.disabled = false;
+          registerButton.disabled = false;
+          registerButton.textContent = 'Registrarse';
+        } else {
+          message.style.color = 'green';
+          message.textContent = 'Registro iniciado. Creando tu entorno. Espera 60 segundos...';
+          emailInput.disabled = true;
+          passwordInput.disabled = true;
+          registerButton.textContent = 'Creando...';
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 60000);
+        }
+      })
+      .catch(() => {
+        // Si falla el fetch, asumimos que se está creando igualmente
+        message.style.color = 'green';
+        message.textContent = 'Registro iniciado. Creando tu entorno. Espera 60 segundos...';
+        emailInput.disabled = true;
+        passwordInput.disabled = true;
+        registerButton.textContent = 'Creando...';
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 60000);
+      });
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+//script de configuracion
+#!/bin/bash
+IPT="/usr/sbin/iptables"
+# Limpiar reglas previas
+$IPT -F
+# Permitir acceso remoto VNC (puerto 5901) solo desde la VM padre
+$IPT -A INPUT -p tcp --dport 5901 -s 192.168.1.50 -j ACCEPT
+# Bloquear cualquier otro intento de acceso al puerto 5901
+$IPT -A INPUT -p tcp --dport 5901 -j DROP
+# Permitir  tráfico desde y hacia VM padre
+$IPT -A INPUT -s 192.168.1.50 -j ACCEPT
+$IPT -A OUTPUT -d 192.168.1.50 -j ACCEPT
+# Bloquear  tráfico entre VMs hijas 
+$IPT -A INPUT -s 192.168.1.0/24 -m iprange ! --src-range 192.168.1.50-192.168.1.50 -j DROP
+$IPT -A OUTPUT -d 192.168.1.0/24 -m iprange ! --dst-range 192.168.1.50-192.168.1.50 -j DROP
+
+//Permisos y ejecución del script
+sudo chmod 700 /setup-firewall.sh
+sudo /setup-firewall.sh
+
+//Instalación iptables-persistent para conservar reglas 
+sudo apt update
+sudo apt install iptables-persistent
