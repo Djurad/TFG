@@ -50,9 +50,9 @@ TFG/
 ├── Guacamole/                 → Apache Guacamole 
 │   └── docker-compose.yml    → Archivo de Guacamole dockerizado
 ├── watcher.js                → Componente que lanza máquinas virtuales desde el host
-├── bridge/                   → Configuraciones de red tipo bridge dentro de la Vm padre, para crear puente con las Vms hijas
-├── configXfecVnc/            → Configuración de escritorio XFCE + servicio VNC dentro de las Vms hijas
-├── seguridad/                → Configuración de red y aislamiento dentro de las Vms hijas
+├── bridge                    → Configuraciones de red tipo bridge dentro de la Vm padre, para crear puente con las Vms hijas
+├── configXfecVnc             → Configuración de escritorio XFCE + servicio VNC dentro de las Vms hijas
+├── seguridad                 → Configuración de red y aislamiento dentro de las Vms hijas
 ```
 
 ---
