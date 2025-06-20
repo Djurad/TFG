@@ -158,7 +158,7 @@ sudo systemctl enable vncserver@1.service
 sudo systemctl start vncserver@1.service
 ```
 
-> Esta configuración se encuentra en `configXfecVnc/`.
+> Esta configuración se encuentra en `configXfecVnc`.
 
 ---
 
@@ -192,7 +192,7 @@ sudo apt update
 sudo apt install iptables-persistent
 ```
 
-> Este script se encuentra en `seguridad/`.
+> Este script se encuentra en `seguridad`.
 
 
 ## Cómo desplegar el sistema
