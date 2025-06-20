@@ -56,6 +56,141 @@ TFG/
 ```
 
 ---
+## Requisitos previos y preparación del entorno
+
+Antes de desplegar el sistema, es necesario realizar una serie de pasos previos en la máquina anfitriona (VM padre).
+
+### 1. Crear el puente de red `br0`
+
+Este puente permitirá que las máquinas virtuales hijas se conecten directamente a la red local:
+
+```bash
+# Creación del puente de red llamado br0
+sudo nmcli connection add type bridge con-name br0 ifname br0
+
+# Configuración de br0 con dirección IP estática y parámetros de red
+sudo nmcli connection modify br0 \
+  ipv4.method manual \
+  ipv4.addresses 192.168.1.50/24 \
+  ipv4.gateway 192.168.1.1 \
+  ipv4.dns "8.8.8.8 8.8.4.4" \
+  bridge.stp no \
+  bridge.forward-delay 0 \
+  ipv6.method ignore
+
+# Asociación de la interfaz física ens33 como esclava del puente br0
+sudo nmcli connection add type bridge-slave \
+  ifname ens33 \
+  master br0 \
+  con-name ens33-slave
+
+# Desactivación de la conexión original de ens33 (evita conflictos)
+sudo nmcli connection down ens33 || true
+
+# Activación de la interfaz esclava y del puente br0
+sudo nmcli connection up ens33-slave
+sudo nmcli connection up br0
+```
+
+> Este procedimiento está disponible en el archivo `bridge`.
+
+---
+
+### 2. Tener disponible una VM molde
+
+Puedes usar directamente una VM ya preparada descargando los siguientes archivos:
+
+📁 **[VM Molde - XML y .qcow2](https://mega.nz/file/gsJxhIZT#dq6sLpd_EeCLkS_ostibBQo24b8aCsCTmYxb5tRKQw4)**
+
+---
+
+### 3. (Opcional) Crear tu propia VM con XFCE y VNC
+
+Si prefieres crear la VM molde desde cero, sigue los siguientes pasos:
+
+```bash
+# 1. Instalación de los paquetes necesarios
+sudo apt update
+sudo apt install xfce4 xfce4-goodies
+sudo apt install tigervnc-standalone-server
+sudo apt install dbus-x11
+
+# 2. Preparación de la sesión VNC
+vncserver
+vncserver -kill :1
+
+# 3. Configuración del archivo de inicio de sesión gráfica
+nano ~/.vnc/xstartup
+# Contenido
+#!/bin/sh
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+exec startxfce4
+chmod +x ~/.vnc/xstartup
+
+# 4. Crear servicio systemd para iniciar VNC automáticamente
+sudo nano /etc/systemd/system/vncserver@.service
+# Contenido
+[Unit]
+Description=Start TigerVNC server
+After=syslog.target network.target
+
+[Service]
+Type=forking
+User=alumno
+Group=alumno
+WorkingDirectory=/home/alumno
+
+PIDFile=/home/alumno/.vnc/%H:%i.pid
+ExecStartPre=-/usr/bin/vncserver -kill :%i > /dev/null 2>&1
+ExecStart=/usr/bin/vncserver -depth 24 -geometry 1366x768 :%i -localhost no
+ExecStop=/usr/bin/vncserver -kill :%i
+
+[Install]
+WantedBy=multi-user.target
+
+# 5. Activar el servicio
+sudo systemctl daemon-reload
+sudo systemctl enable vncserver@1.service
+sudo systemctl start vncserver@1.service
+```
+
+> Esta configuración se encuentra en `configXfecVnc/`.
+
+---
+
+### 4. (Opcional) Aplicar reglas de aislamiento de red entre VMs hijas
+
+Estas reglas bloquean el tráfico entre VMs hijas y permiten únicamente el acceso desde la VM padre:
+
+```bash
+# script de configuración
+#!/bin/bash
+IPT="/usr/sbin/iptables"
+# Limpiar reglas previas
+$IPT -F
+# Permitir acceso remoto VNC (puerto 5901) solo desde la VM padre
+$IPT -A INPUT -p tcp --dport 5901 -s 192.168.1.50 -j ACCEPT
+# Bloquear cualquier otro intento de acceso al puerto 5901
+$IPT -A INPUT -p tcp --dport 5901 -j DROP
+# Permitir  tráfico desde y hacia VM padre
+$IPT -A INPUT -s 192.168.1.50 -j ACCEPT
+$IPT -A OUTPUT -d 192.168.1.50 -j ACCEPT
+# Bloquear  tráfico entre VMs hijas 
+$IPT -A INPUT -s 192.168.1.0/24 -m iprange ! --src-range 192.168.1.50-192.168.1.50 -j DROP
+$IPT -A OUTPUT -d 192.168.1.0/24 -m iprange ! --dst-range 192.168.1.50-192.168.1.50 -j DROP
+
+# Permisos y ejecución del script
+sudo chmod 700 /setup-firewall.sh
+sudo /setup-firewall.sh
+
+# Instalación de iptables-persistent para conservar reglas al reiniciar
+sudo apt update
+sudo apt install iptables-persistent
+```
+
+> Este script se encuentra en `seguridad/`.
+
 
 ## Cómo desplegar el sistema
 
