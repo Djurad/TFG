@@ -37,7 +37,7 @@ Este trabajo ha sido desplegado y probado sobre una máquina virtual con **Ubunt
 
 ---
 
-## 📁 Estructura del proyecto
+##  Estructura del proyecto
 
 ```
 TFG/
