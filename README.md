@@ -34,7 +34,7 @@ A la hora de activar el modo bridge en VMware resulta útil el siguiente tutoria
 - **MySQL**
 - **Apache Guacamole**
 - **QEMU/KVM**, **virt-manager**
-- **iptables**, **nmcli**, **bridges**
+- **iptables**, **nmcli**
 - **TigerVNC**, **XFCE**
 
 ---
