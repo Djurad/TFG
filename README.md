@@ -91,7 +91,9 @@ sudo nmcli connection down ens33 || true
 sudo nmcli connection up ens33-slave
 sudo nmcli connection up br0
 ```
-
+> **Nota:** `ens33` es la interfaz de red física utilizada en la VM padre de este proyecto.  
+> Si estás desplegando el sistema en otro entorno, este nombre puede variar.  
+> Puedes comprobar el nombre exacto con el comando `ip a`.
 > Este procedimiento está disponible en el archivo `bridge`.
 
 ---
