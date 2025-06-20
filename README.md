@@ -100,7 +100,7 @@ sudo nmcli connection up br0
 
 Puedes usar directamente una VM ya preparada descargando los siguientes archivos:
 
-📁 **[VM Molde - XML y .qcow2](https://mega.nz/file/gsJxhIZT#dq6sLpd_EeCLkS_ostibBQo24b8aCsCTmYxb5tRKQw4)**
+ **[VM Molde - XML y .qcow2](https://mega.nz/file/gsJxhIZT#dq6sLpd_EeCLkS_ostibBQo24b8aCsCTmYxb5tRKQw4)**
 
 ---
 
@@ -161,7 +161,7 @@ sudo systemctl start vncserver@1.service
 
 ### 4. (Opcional) Aplicar reglas de aislamiento de red entre VMs hijas
 
-Estas reglas bloquean el tráfico entre VMs hijas y permiten únicamente el acceso desde la VM padre:
+Estas reglas bloquean el tráfico entre VMs hijas y permiten únicamente el acceso desde la VM padre. Solo es necesario aplicarla en la Vm molde la primera vez que se crea.Estas reglas se heredan a las Vms hijas durante el proceso de clonación de la Vm molde:
 
 ```bash
 # script de configuración
