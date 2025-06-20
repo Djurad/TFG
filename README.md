@@ -11,7 +11,7 @@ Este proyecto permite al profesorado desplegar máquinas virtuales aisladas para
 
 La solución está diseñada para ejecutarse sobre sistemas operativos Linux con soporte para virtualización mediante KVM/QEMU. 
 
-En caso de ejecutarse desde una máquina virtual, es imprescindible que el equipo físico tenga habilitada la **virtualización anidada**.La virtualización anidada se puede activar desde la BIOS de su dispositivo.
+En caso de ejecutarse desde una máquina virtual, es imprescindible que el equipo físico tenga habilitada la **virtualización anidada**.La virtualización anidada se puede activar desde la BIOS de su dispositivo. **NOTA:**No todos los dispositivos permiten activar esta opción.
 
 Este trabajo ha sido desplegado y probado sobre una máquina virtual con **Ubuntu 24.04 LTS**, utilizando **VMware Workstation 17 Pro** como hipervisor, en modo bridge.
 A la hora de activar el modo bridge en VMware resulta útil el siguiente tutorial: https://youtu.be/4f-5D4D2MQ0?si=aJa5Mr6N8xc5azO-
