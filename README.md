@@ -47,7 +47,7 @@ TFG/
 │   ├── backend/              → Carpeta con la lógica del proyecto
 │   ├── public/               → Archivos HTML (registro, login, panel de administración)
 │   └── docker-compose.yml    → Archivo con backend y MySQL dockerizados
-├── Guacamole/                 → Apache Guacamole 
+├── Guacamole/                → Apache Guacamole 
 │   └── docker-compose.yml    → Archivo de Guacamole dockerizado
 ├── watcher.js                → Componente que lanza máquinas virtuales desde el host
 ├── bridge                    → Configuraciones de red tipo bridge dentro de la Vm padre, para crear puente con las Vms hijas
