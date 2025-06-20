@@ -1,11 +1,11 @@
-# 🛡️ Sistema de Gestión de Entornos Virtualizados para Prácticas de Ciberseguridad
+#  Sistema de Gestión de Entornos Virtualizados para Prácticas de Ciberseguridad
 
 **Trabajo Fin de Grado – Universidad Politécnica de Madrid**  
 **Autor:** Diego Ramiro Jurado Reyna · 2025
 
 ---
 
-## 🧭 Descripción general
+##  Descripción general
 
 Este proyecto permite al profesorado desplegar máquinas virtuales aisladas para cada alumno, listas para acceder desde el navegador. Está pensado para prácticas de ciberseguridad, ofreciendo un entorno seguro y sencillo de usar.
 
@@ -15,7 +15,7 @@ Este trabajo ha sido desplegado y probado sobre una máquina virtual con **Ubunt
 
 ---
 
-## 🌟 Funcionalidades principales
+##  Funcionalidades principales
 
 - Creación automática de VMs para cada alumno
 - Acceso vía escritorio remoto desde el navegador
@@ -25,10 +25,10 @@ Este trabajo ha sido desplegado y probado sobre una máquina virtual con **Ubunt
 
 ---
 
-## 🧰 Tecnologías utilizadas
+##  Tecnologías utilizadas
 
 - **Docker**, **Docker Compose**
-- **Node.js**, **Express**
+- **Node.js**
 - **MySQL**
 - **Apache Guacamole**
 - **KVM/QEMU**, **virt-manager**
@@ -55,7 +55,7 @@ TFG/
 
 ---
 
-## 🚀 Cómo desplegar el sistema
+## Cómo desplegar el sistema
 
 ### 1. Clonar el repositorio
 
@@ -87,12 +87,12 @@ node watcher.js
 
 ---
 
-🔗 Una vez desplegado el formulario, accede a la interfaz web desde:  
+ Una vez desplegado el formulario, accede a la interfaz web desde:  
 [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## 📜 Licencia MIT
+##  Licencia MIT
 
 MIT License  
 Copyright (c) 2025 Diego Ramiro Jurado Reyna
