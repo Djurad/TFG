@@ -165,7 +165,7 @@ sudo systemctl start vncserver@1.service
 
 ### 4. (Opcional) Aplicar reglas de aislamiento de red entre VMs hijas
 
-Estas reglas bloquean el tráfico entre VMs hijas y permiten únicamente el acceso desde la VM padre. Solo es necesario aplicarla en la Vm molde la primera vez que se crea.Estas reglas se heredan a las Vms hijas durante el proceso de clonación de la Vm molde:
+Estas reglas bloquean el tráfico entre VMs hijas y permiten únicamente el acceso desde la VM padre. Solo es necesario aplicarla en la Vm molde la primera vez que se crea. Estas reglas se heredan a las Vms hijas durante el proceso de clonación de la Vm molde:
 
 ```bash
 # script de configuración
