@@ -205,7 +205,7 @@ git clone https://github.com/Djurad/TFG.git
 cd TFG
 ```
 
-### 2. Levantar el formulario (backend + base de datos)
+### 2. Levantar el formulario (interfaces web + backend + base de datos)
 
 ```bash
 cd Formulario
