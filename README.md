@@ -110,8 +110,9 @@ Puedes usar directamente una VM ya preparada descargando los siguientes archivos
 ### 3. (Opcional) Crear tu propia VM con XFCE y VNC
 
 Si prefieres crear la VM molde desde cero, tras haber instalado el sistema operativo sigue los siguientes pasos:
-Este código sirve para distribuciones de Debian.
+
 ```bash
+Este código sirve para distribuciones de Debian.
 # 1. Instalación de los paquetes necesarios
 sudo apt update
 sudo apt install xfce4 xfce4-goodies
